@@ -25,9 +25,18 @@ class NeuralNetwork:
             weight_matrix = np.random.rand(layer_structure[i], layer_structure[i + 1])
             self.weights.append(weight_matrix)
 
+    def sigmoid_function(z):
+        return 1 / (1 + np.exp(-z))
+
+    def sigmoid_derivative(self, z):
+        s = self.sigmoid_function(z)
+        return s * (1 - s)
+
+    def softmax(z):
+        return np.exp(z) / sum(np.exp(z))
+
     def feed_forward(self):
         for i in range(self.weights)
-            
 
     def backpropigation(self):
         error = 2 * (self.target - self.approx)
@@ -37,13 +46,3 @@ class NeuralNetwork:
         for i in range(self.iterations):
             self.feed_forward()
             self.backpropigation
-
-    def sigmoid_function(self, z):
-        return 1 / (1 + np.exp(-z))
-
-    def sigmoid_derivative(self, z):
-        s = self.sigmoid_function(z)
-        return s * (1 - s)
-
-
-    
