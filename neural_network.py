@@ -35,12 +35,22 @@ class NeuralNetwork:
     def softmax(z):
         return np.exp(z) / sum(np.exp(z))
 
-    def feed_forward(self):
-        for i in range(self.weights)
+    def feed_forward(self, W1, b1, W2, b2, X):
+        Z1 = W1.dot(X) + b1
+        A1 = self.sigmoid_function(Z1)
+        Z2 = W2.dot(X) + b2
+        A2 = self.softmax(Z2)
 
-    def backpropigation(self):
-        error = 2 * (self.target - self.approx)
-        for i in range(self.weights)
+    def backpropagation(self,  W1, b1, W2, b2, X):
+        dW2 = -2 * (self.target - self.approx - b1) * np.transpose(X)
+        db2 = -2 * (self.target - self.approx - b1)
+        dW1 = -2 * (self.target - self.approx - b2) * np.transpose(X)
+        db1 =  -2 * (self.target - self.approx - b2)
+
+        W1 = W1 - self.learning_rate * dW1
+        b1 = b1 - self.learning_rate * db1 
+        W2 = W2 - self.learning_rate * dW2
+        b2 = b2 - self.learning_rate * db2 
 
     def train(self):
         for i in range(self.iterations):
