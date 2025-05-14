@@ -1,18 +1,21 @@
-from enum import Enum
 import numpy as np
 
 class NeuralNetwork:
-    learning_rate = 0.01
+    learning_rate = None
     input = None
     target = None
     weights = None
     input = None
     layers = None
+    iterations = None
 
-    def __init__(self, input, target, hidden):
+    def __init__(self, input, target, hidden, learning_rate, iterations):
         self.input = np.hstack([input, np.ones((input.shape[0], 1))])
-        self.approx = np.zeros_like(target)
         self.target = target
+        self.learning_rate = learning_rate
+        self.iterations = iterations
+
+        self.approx = np.zeros_like(target)
         self.weights = []
         self.layers = [self.input]
 
@@ -22,20 +25,25 @@ class NeuralNetwork:
             weight_matrix = np.random.rand(layer_structure[i], layer_structure[i + 1])
             self.weights.append(weight_matrix)
 
-    def feed_forward(obj):
-        pass
+    def feed_forward(self):
+        for i in range(self.weights)
+            
 
-    def backpropigation(obj):
-        pass
+    def backpropigation(self):
+        error = 2 * (self.target - self.approx)
+        for i in range(self.weights)
 
-    def train(obj):
-        pass
+    def train(self):
+        for i in range(self.iterations):
+            self.feed_forward()
+            self.backpropigation
 
-    def activation_function():
-        pass
+    def sigmoid_function(self, z):
+        return 1 / (1 + np.exp(-z))
 
-    def activation_derivative():
-        pass
+    def sigmoid_derivative(self, z):
+        s = self.sigmoid_function(z)
+        return s * (1 - s)
 
 
     
