@@ -8,10 +8,14 @@ class NeuralNetwork:
         self.learning_rate = learning_rate
         self.iterations = iterations
 
-        self.W1 = np.random.rand(10, 784) - 0.5
-        self.b1 = np.random.rand(10, 1) - 0.5
-        self.W2 = np.random.rand(10, 10) - 0.5
-        self.b2 = np.random.rand(10, 1) - 0.5
+        input_size = self.X.shape[1]
+        output_size = self.Y.shape[1]
+
+        # Initialize weights and biases
+        self.W1 = np.random.randn(input_size, hidden) * 0.01
+        self.b1 = np.zeros((1, hidden))
+        self.W2 = np.random.randn(hidden, output_size) * 0.01
+        self.b2 = np.zeros((1, output_size))
 
     def sigmoid_function(self, z):
         return 1 / (1 + np.exp(-z))
@@ -30,6 +34,8 @@ class NeuralNetwork:
         self.fA2 = self.softmax(self.Z2)
 
     def backpropagation(self):
+        m = self.Y.shape[0]
+
         self.dW2 = -2 * (self.target - self.approx - self.b1) * np.transpose(self.X)
         self.db2 = -2 * (self.target - self.approx - self.b1)
         self.dW1 = -2 * (self.target - self.approx - self.b2) * np.transpose(self.X)
@@ -46,4 +52,8 @@ class NeuralNetwork:
             self.backpropigation()
 
     def predict(self, X):
-        pass
+        Z1 = np.dot(X, self.W1) + self.b1
+        A1 = self.sigmoid(Z1)
+        Z2 = np.dot(A1, self.W2) + self.b2
+        A2 = self.softmax(Z2)
+        return A2
