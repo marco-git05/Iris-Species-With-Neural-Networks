@@ -50,6 +50,7 @@ class NeuralNetwork:
         dW1 = np.dot(self.X.T, dZ1) / m
         db1 = np.sum(dZ1, axis=0, keepdims=True) / m
 
+        # Updates weights and biases
         self.W1 = self.W1 - self.learning_rate * dW1
         self.b1 = self.b1 - self.learning_rate * db1 
         self.W2 = self.W2 - self.learning_rate * dW2
