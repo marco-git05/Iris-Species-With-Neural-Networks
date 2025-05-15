@@ -15,11 +15,12 @@ y_encoded = encoder.fit_transform(y)
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
 
 
-nn = NeuralNetwork(input=X_train, target=y_train, hidden=5, learning_rate=0.1, iterations=20)
+nn = NeuralNetwork(input=X_train, target=y_train, hidden=5, learning_rate=0.1, iterations=1000)
 nn.train()
 
 predictions = nn.predict(X_test)
 
+# Computes the accuracy using probabilities
 def compute_accuracy(predictions, targets):
     pred_labels = predictions.argmax(axis=1)
     true_labels = targets.argmax(axis=1)
