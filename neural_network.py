@@ -1,31 +1,19 @@
 import numpy as np
 
 class NeuralNetwork:
-    learning_rate = None
-    input = None
-    target = None
-    weights = None
-    input = None
-    layers = None
-    iterations = None
 
     def __init__(self, input, target, hidden, learning_rate, iterations):
-        self.input = np.hstack([input, np.ones((input.shape[0], 1))])
-        self.target = target
+        self.X = input
+        self.Y = target
         self.learning_rate = learning_rate
         self.iterations = iterations
 
-        self.approx = np.zeros_like(target)
-        self.weights = []
-        self.layers = [self.input]
+        self.W1 = np.random.rand(10, 784) - 0.5
+        self.b1 = np.random.rand(10, 1) - 0.5
+        self.W2 = np.random.rand(10, 10) - 0.5
+        self.b2 = np.random.rand(10, 1) - 0.5
 
-        layer_structure = [self.input.shape[1]] + [h + 1 for h in hidden[:-1]] + [hidden[-1], target.shape[1]]
-
-        for i in range(len(layer_structure) - 1):
-            weight_matrix = np.random.rand(layer_structure[i], layer_structure[i + 1])
-            self.weights.append(weight_matrix)
-
-    def sigmoid_function(z):
+    def sigmoid_function(self, z):
         return 1 / (1 + np.exp(-z))
 
     def sigmoid_derivative(self, z):
@@ -35,24 +23,27 @@ class NeuralNetwork:
     def softmax(z):
         return np.exp(z) / sum(np.exp(z))
 
-    def feed_forward(self, W1, b1, W2, b2, X):
-        Z1 = W1.dot(X) + b1
-        A1 = self.sigmoid_function(Z1)
-        Z2 = W2.dot(X) + b2
-        A2 = self.softmax(Z2)
+    def feed_forward(self):
+        self.Z1 = np.dot(self.W1, self.X) + self.b1
+        self.A1 = self.sigmoid_function(self.Z1)
+        self.Z2 = np.dot(self.W2, self.X) + self.b2
+        self.fA2 = self.softmax(self.Z2)
 
-    def backpropagation(self,  W1, b1, W2, b2, X):
-        dW2 = -2 * (self.target - self.approx - b1) * np.transpose(X)
-        db2 = -2 * (self.target - self.approx - b1)
-        dW1 = -2 * (self.target - self.approx - b2) * np.transpose(X)
-        db1 =  -2 * (self.target - self.approx - b2)
+    def backpropagation(self):
+        self.dW2 = -2 * (self.target - self.approx - self.b1) * np.transpose(self.X)
+        self.db2 = -2 * (self.target - self.approx - self.b1)
+        self.dW1 = -2 * (self.target - self.approx - self.b2) * np.transpose(self.X)
+        self.db1 =  -2 * (self.target - self.approx - self.b2)
 
-        W1 = W1 - self.learning_rate * dW1
-        b1 = b1 - self.learning_rate * db1 
-        W2 = W2 - self.learning_rate * dW2
-        b2 = b2 - self.learning_rate * db2 
+        self.W1 = self.W1 - self.learning_rate * self.dW1
+        self.b1 = self.b1 - self.learning_rate * self.db1 
+        self.W2 = self.W2 - self.learning_rate * self.dW2
+        self.b2 = self.b2 - self.learning_rate * self.db2 
 
     def train(self):
         for i in range(self.iterations):
             self.feed_forward()
-            self.backpropigation
+            self.backpropigation()
+
+    def predict(self, X):
+        pass
