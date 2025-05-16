@@ -2,6 +2,7 @@ import numpy as np
 
 class NeuralNetwork:
 
+    # Intializes variables 
     def __init__(self, input, target, hidden, learning_rate, iterations):
         self.X = input
         self.Y = target
@@ -19,6 +20,7 @@ class NeuralNetwork:
         self.W2 = np.random.randn(hidden, output_size) * 0.01
         self.b2 = np.zeros((1, output_size))
 
+    # Activation function
     def sigmoid_function(self, z):
         return 1 / (1 + np.exp(-z))
 
@@ -27,20 +29,23 @@ class NeuralNetwork:
         s = self.sigmoid_function(z)
         return s * (1 - s)
 
+    # Computes the probability vector
     def softmax(self, z):
         exp_z = np.exp(z - np.max(z, axis=1, keepdims=True))
         return exp_z / np.sum(exp_z, axis=1, keepdims=True)
 
-    # Forwrd propigation
+    # Forward propigation
     def feed_forward(self):
         self.Z1 = np.dot(self.X, self.W1) + self.b1
         self.A1 = self.sigmoid_function(self.Z1)
         self.Z2 = np.dot(self.A1, self.W2) + self.b2
         self.A2 = self.softmax(self.Z2)
 
+    # Backpropigation step
     def backpropagation(self):
         m = self.Y.shape[0]
 
+        # Computes partial derivatives
         dZ2 = self.A2 - self.Y 
         dW2 = np.dot(self.A1.T, dZ2) / m
         db2 = np.sum(dZ2, axis=0, keepdims=True) / m
@@ -56,11 +61,13 @@ class NeuralNetwork:
         self.W2 = self.W2 - self.learning_rate * dW2
         self.b2 = self.b2 - self.learning_rate * db2 
 
+    # Training loop
     def train(self):
         for i in range(self.iterations):
             self.feed_forward()
             self.backpropagation()
 
+    # Predicts the final output layer
     def predict(self, X):
         Z1 = np.dot(X, self.W1) + self.b1
         A1 = self.sigmoid_function(Z1)
